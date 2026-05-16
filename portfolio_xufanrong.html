@@ -29,11 +29,11 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 .wrapper{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 28px}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(12px);background:rgba(245,247,250,.9)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 28px;height:56px}
-.nav-logo{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:.04em;text-decoration:none}
+.nav-logo{font-family:'Space Mono',monospace;font-size:16px;color:var(--accent);letter-spacing:.04em;text-decoration:none}
 .nav-links{display:flex;gap:4px}
-.nav-links a{font-family:'Space Mono',monospace;font-size:11px;color:var(--text2);text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .15s}
+.nav-links a{font-family:'Space Mono',monospace;font-size:14px;color:var(--text2);text-decoration:none;padding:6px 14px;border-radius:6px;transition:all .15s}
 .nav-links a:hover{color:var(--text);background:var(--surface2)}
-.nav-status{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text2)}
+.nav-status{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:14px;color:var(--text2)}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2.4s ease-in-out infinite;box-shadow:0 0 5px rgba(22,163,74,.4)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hero{min-height:100vh;display:flex;align-items:center;padding:100px 0 60px}
@@ -335,8 +335,8 @@ footer{border-top:1px solid var(--border);padding:28px 0;background:var(--surfac
           <li>使用 FreeRTOS 消息队列解耦按键、充电检测、传感器数据等模块，通过 IdleBreak 机制统一管理屏幕休眠计时器</li>
         </ul>
         <div class="project-actions">
-          <!-- 如有 GitHub 链接，取消注释并填入 -->
-          <!-- <a class="proj-btn primary" href="https://github.com/yourname/smartwatch" target="_blank">↗ GitHub</a> -->
+          <a class="proj-btn primary" href="project_watch.html">📄 查看详情 →</a>
+          <!-- <a class="proj-btn" href="https://github.com/yourname/smartwatch" target="_blank">↗ GitHub</a> -->
         </div>
       </div>
       <!--
@@ -378,7 +378,8 @@ footer{border-top:1px solid var(--border);padding:28px 0;background:var(--surfac
           <li>合理规划 CCM RAM / SRAM 布局：任务栈分配至 <strong>64KB CCM RAM</strong> 提升调度效率，DMA 缓冲区分配至普通 SRAM</li>
         </ul>
         <div class="project-actions">
-          <!-- <a class="proj-btn primary" href="https://github.com/yourname/oscilloscope" target="_blank">↗ GitHub</a> -->
+          <a class="proj-btn primary" href="project_oscilloscope.html">📄 查看详情 →</a>
+          <!-- <a class="proj-btn" href="https://github.com/yourname/oscilloscope" target="_blank">↗ GitHub</a> -->
         </div>
       </div>
       <!--
@@ -422,7 +423,8 @@ footer{border-top:1px solid var(--border);padding:28px 0;background:var(--surfac
           <li>使用互斥量保护 I²C 总线资源，队列消息实现显示任务与数据读取任务的安全同步</li>
         </ul>
         <div class="project-actions">
-          <!-- <a class="proj-btn primary" href="https://github.com/yourname/smart-clock" target="_blank">↗ GitHub</a> -->
+          <a class="proj-btn primary" href="project_clock.html">📄 查看详情 →</a>
+          <!-- <a class="proj-btn" href="https://github.com/yourname/smart-clock" target="_blank">↗ GitHub</a> -->
         </div>
       </div>
       <div class="project-image-strip">

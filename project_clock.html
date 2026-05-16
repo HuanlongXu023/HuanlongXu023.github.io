@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>智能闹钟 · 徐繁荣</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f7fa;--surface:#fff;--surface2:#eef0f4;
+  --border:#dde1e7;--border2:#bec4ce;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;
+  --accent:#b45309;--accent2:#16a34a;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.6}
+.grid-bg{position:fixed;inset:0;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.5}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(12px);background:rgba(245,247,250,.92)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:0 28px;height:54px}
+.nav-back{font-family:'Space Mono',monospace;font-size:14px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .15s}
+.nav-back:hover{color:var(--accent)}
+.nav-title{font-family:'Space Mono',monospace;font-size:14px;color:var(--text3)}
+.wrapper{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 28px}
+.hero{padding:110px 0 60px}
+.eyebrow{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.1em;margin-bottom:16px}
+h1{font-size:clamp(36px,6vw,64px);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:10px}
+.subtitle{font-family:'Space Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:28px}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:36px}
+.tag{font-family:'Space Mono',monospace;font-size:11px;padding:4px 11px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+.divider{height:1px;background:var(--border);margin:48px 0}
+.img-grid{display:grid;gap:12px;margin-bottom:48px}
+.img-grid.cols-1{grid-template-columns:1fr}
+.img-grid.cols-2{grid-template-columns:1fr 1fr}
+.img-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+.img-box{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface2);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+.img-box img{width:100%;height:100%;object-fit:cover;display:block}
+.img-caption{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);margin-top:8px;text-align:center}
+.ph{text-align:center;padding:20px}
+.ph span{font-size:36px;opacity:.2;display:block;margin-bottom:8px}
+.ph p{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);line-height:1.7}
+.section-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;margin-bottom:12px}
+.section-label::before{content:'// '}
+h2{font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px;color:var(--text)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:14px}
+.card-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.badge{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(180,83,9,.1);color:var(--accent);border:1px solid rgba(180,83,9,.25)}
+.badge.green{background:rgba(22,163,74,.1);color:var(--accent2);border-color:rgba(22,163,74,.25)}
+.card p,.card li{font-size:14px;color:var(--text2);line-height:1.9}
+.card ul{list-style:none;padding:0}
+.card ul li{padding:4px 0 4px 16px;position:relative}
+.card ul li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:11px;top:6px;font-family:'Space Mono',monospace}
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:48px}
+.spec-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
+.spec-key{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.08em;margin-bottom:6px}
+.spec-val{font-size:15px;font-weight:600;color:var(--text)}
+.spec-unit{font-size:12px;color:var(--text3);font-weight:400;margin-left:4px}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:13px;padding:10px 20px;border-radius:8px;border:1px solid var(--border);color:var(--text2);text-decoration:none;transition:all .2s;background:var(--surface);margin-bottom:80px}
+.back-btn:hover{border-color:var(--border2);color:var(--text);transform:translateX(-2px)}
+@media(max-width:640px){.img-grid.cols-2,.img-grid.cols-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-back" href="index.html">← 返回主页</a>
+    <span class="nav-title">PROJECT_03</span>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <div class="hero">
+    <div class="eyebrow">PROJECT_03 · 2024.03 — 2024.06 · 个人项目</div>
+    <h1>智能闹钟</h1>
+    <div class="subtitle">Smart Alarm Clock · STM32F429 + FreeRTOS + ESP8266</div>
+    <div class="tag-row">
+      <span class="tag">STM32F429</span>
+      <span class="tag">FreeRTOS</span>
+      <span class="tag">ESP8266</span>
+      <span class="tag">心知天气 API</span>
+      <span class="tag">RTC</span>
+      <span class="tag">OLED (I²C)</span>
+      <span class="tag">蜂鸣器</span>
+      <span class="tag">按键输入</span>
+    </div>
+
+    <div class="img-grid cols-2">
+      <div>
+        <div class="img-box">
+          <!-- <img src="images/clock_oled.jpg" alt="OLED 显示"/> -->
+          <div class="ph"><span>⏰</span><p>OLED 时间&amp;天气显示<br/>images/clock_oled.jpg</p></div>
+        </div>
+        <p class="img-caption">fig.1 — OLED 显示效果</p>
+      </div>
+      <div>
+        <div class="img-box">
+          <!-- <img src="images/clock_hw.jpg" alt="硬件实物"/> -->
+          <div class="ph"><span>🔧</span><p>硬件实物图<br/>images/clock_hw.jpg</p></div>
+        </div>
+        <p class="img-caption">fig.2 — 硬件实物</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPECS -->
+  <div class="section-label">核心指标</div>
+  <div class="spec-grid">
+    <div class="spec-item"><div class="spec-key">主控芯片</div><div class="spec-val">STM32F429</div></div>
+    <div class="spec-item"><div class="spec-key">网络模块</div><div class="spec-val">ESP8266<span class="spec-unit">Wi-Fi</span></div></div>
+    <div class="spec-item"><div class="spec-key">显示屏</div><div class="spec-val">OLED<span class="spec-unit">I²C</span></div></div>
+    <div class="spec-item"><div class="spec-key">时钟精度</div><div class="spec-val">RTC<span class="spec-unit">硬件时钟</span></div></div>
+    <div class="spec-item"><div class="spec-key">天气数据</div><div class="spec-val">REST<span class="spec-unit">API</span></div></div>
+    <div class="spec-item"><div class="spec-key">多任务</div><div class="spec-val">FreeRTOS</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">功能详解</div>
+  <h2>系统功能</h2>
+
+  <div class="card">
+    <div class="card-title">RTC 时钟与闹钟 <span class="badge green">硬件时钟</span></div>
+    <ul>
+      <li>利用 STM32 内置 RTC 外设实现高精度时钟功能，掉电后通过纽扣电池保持走时</li>
+      <li>用户可通过按键设置当前时间与闹钟时间，到达指定时间蜂鸣器自动响铃</li>
+      <li>支持多组闹钟设置，EEPROM 掉电保存</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">联网获取实时天气 <span class="badge">ESP8266 + HTTP</span></div>
+    <ul>
+      <li>通过 ESP8266 Wi-Fi 模块连接互联网，调用心知天气 REST API</li>
+      <li>定时获取指定城市的实时天气数据（温度、天气状况、湿度等）</li>
+      <li>JSON 数据解析后更新至显示任务，OLED 实时显示天气信息</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">OLED 多信息显示 <span class="badge green">I²C</span></div>
+    <ul>
+      <li>OLED 屏幕通过 I²C 总线驱动，同时显示时间、日期、天气信息</li>
+      <li>多任务共享 I²C 总线，通过互斥量（Mutex）保证总线访问的互斥安全</li>
+      <li>自定义字库与图标，界面清晰美观</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">技术难点与解决方案</div>
+  <h2>攻坚过程</h2>
+
+  <div class="card">
+    <div class="card-title">难点 1 — 任务优先级合理分配</div>
+    <p>OLED 显示任务对实时性要求高，设为较高优先级，避免显示内容卡顿；天气数据读取需要等待网络响应，属于低实时性任务，设为低优先级，让出 CPU 给更紧迫的任务使用。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">难点 2 — 任务堆栈大小配置</div>
+    <p>天气数据读取任务需要缓存 HTTP 响应的 JSON 字符串，数据量较大。早期堆栈配置偏小导致系统随机卡死（栈溢出）。通过分析任务最大栈深度，为该任务分配足够的堆栈空间后，系统运行稳定。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">难点 3 — 多任务共享 I²C 总线</div>
+    <p>显示任务与其他任务（如按键扫描后需要刷新显示）都需要访问 OLED 的 I²C 接口。若不加保护，两个任务同时写 I²C 会导致总线冲突、画面花屏。使用 FreeRTOS 互斥量（Mutex）保护 I²C 操作，同一时刻只允许一个任务访问，彻底解决冲突。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">难点 4 — 显示任务与数据任务同步</div>
+    <p>天气数据异步更新，显示任务需要知道"数据已就绪"再刷新，否则会显示未初始化的脏数据。通过 FreeRTOS 队列消息或信号量实现两个任务间的生产者-消费者同步，显示任务收到通知后再读取最新数据绘制界面。</p>
+  </div>
+
+  <!-- more images -->
+  <div class="divider"></div>
+  <div class="section-label">更多图片</div>
+  <div class="img-grid cols-3">
+    <div>
+      <div class="img-box">
+        <!-- <img src="images/clock_alarm.jpg" alt="闹钟设置"/> -->
+        <div class="ph"><span>⏱</span><p>闹钟设置界面<br/>images/clock_alarm.jpg</p></div>
+      </div>
+      <p class="img-caption">fig.3 — 闹钟设置</p>
+    </div>
+    <div>
+      <div class="img-box">
+        <!-- <img src="images/clock_weather.jpg" alt="天气显示"/> -->
+        <div class="ph"><span>🌤</span><p>天气数据显示<br/>images/clock_weather.jpg</p></div>
+      </div>
+      <p class="img-caption">fig.4 — 实时天气</p>
+    </div>
+    <div>
+      <div class="img-box">
+        <!-- <img src="images/clock_pcb.jpg" alt="PCB"/> -->
+        <div class="ph"><span>🔌</span><p>硬件连接图<br/>images/clock_pcb.jpg</p></div>
+      </div>
+      <p class="img-caption">fig.5 — 硬件连接</p>
+    </div>
+  </div>
+
+  <a class="back-btn" href="index.html">← 返回主页</a>
+</div>
+</body>
+</html>

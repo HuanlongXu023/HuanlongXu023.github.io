@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>智能手表 · 徐繁荣</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f7fa;--surface:#fff;--surface2:#eef0f4;
+  --border:#dde1e7;--border2:#bec4ce;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;
+  --accent:#16a34a;--accent2:#2563eb;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.6}
+.grid-bg{position:fixed;inset:0;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.5}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(12px);background:rgba(245,247,250,.92)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:0 28px;height:54px}
+.nav-back{font-family:'Space Mono',monospace;font-size:14px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .15s}
+.nav-back:hover{color:var(--accent)}
+.nav-title{font-family:'Space Mono',monospace;font-size:14px;color:var(--text3)}
+.wrapper{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 28px}
+.hero{padding:110px 0 60px}
+.eyebrow{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.1em;margin-bottom:16px}
+h1{font-size:clamp(36px,6vw,64px);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:10px}
+.subtitle{font-family:'Space Mono',monospace;font-size:12px;color:var(--text3);margin-bottom:28px}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:36px}
+.tag{font-family:'Space Mono',monospace;font-size:11px;padding:4px 11px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+.divider{height:1px;background:var(--border);margin:48px 0}
+/* image grid */
+.img-grid{display:grid;gap:12px;margin-bottom:48px}
+.img-grid.cols-1{grid-template-columns:1fr}
+.img-grid.cols-2{grid-template-columns:1fr 1fr}
+.img-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+.img-box{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface2);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative}
+.img-box img{width:100%;height:100%;object-fit:cover;display:block}
+.img-box.tall{aspect-ratio:4/5}
+.img-caption{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);margin-top:8px;text-align:center}
+.ph{text-align:center;padding:20px}
+.ph span{font-size:36px;opacity:.2;display:block;margin-bottom:8px}
+.ph p{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);line-height:1.7}
+/* sections */
+.section-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;margin-bottom:12px}
+.section-label::before{content:'// '}
+h2{font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px;color:var(--text)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:14px}
+.card-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.badge{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(22,163,74,.1);color:var(--accent);border:1px solid rgba(22,163,74,.25)}
+.badge.blue{background:rgba(37,99,235,.1);color:var(--accent2);border-color:rgba(37,99,235,.25)}
+.card p,.card li{font-size:14px;color:var(--text2);line-height:1.9}
+.card ul{list-style:none;padding:0}
+.card ul li{padding:4px 0 4px 16px;position:relative}
+.card ul li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:11px;top:6px;font-family:'Space Mono',monospace}
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:48px}
+.spec-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
+.spec-key{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.08em;margin-bottom:6px}
+.spec-val{font-size:15px;font-weight:600;color:var(--text)}
+.spec-unit{font-size:12px;color:var(--text3);font-weight:400;margin-left:4px}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:13px;padding:10px 20px;border-radius:8px;border:1px solid var(--border);color:var(--text2);text-decoration:none;transition:all .2s;background:var(--surface);margin-bottom:80px}
+.back-btn:hover{border-color:var(--border2);color:var(--text);transform:translateX(-2px)}
+@media(max-width:640px){.img-grid.cols-2,.img-grid.cols-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-back" href="index.html">← 返回主页</a>
+    <span class="nav-title">PROJECT_01</span>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">PROJECT_01 · 2025.09 — 2025.12 · 个人项目</div>
+    <h1>智能手表</h1>
+    <div class="subtitle">Smart Watch · STM32F411 + FreeRTOS + LVGL</div>
+    <div class="tag-row">
+      <span class="tag">STM32F411CEU6</span>
+      <span class="tag">FreeRTOS</span>
+      <span class="tag">LVGL</span>
+      <span class="tag">BLE KT6368A</span>
+      <span class="tag">OTA 升级</span>
+      <span class="tag">低功耗</span>
+      <span class="tag">EEPROM</span>
+      <span class="tag">MPU6050</span>
+      <span class="tag">EM7028</span>
+      <span class="tag">SPL06-001</span>
+      <span class="tag">LSM303DLHC</span>
+    </div>
+
+    <!-- ★ 主图区域 -->
+    <!--
+      放图方法：
+      1. 将图片和此 HTML 放同一文件夹（或 images/ 子文件夹）
+      2. 删除 <div class="ph">…</div>，取消注释对应 <img> 标签
+      3. cols-1 / cols-2 / cols-3 控制列数，可自由调整
+    -->
+    <div class="img-grid cols-2">
+      <div>
+        <div class="img-box">
+          <!-- <img src="images/watch_front.jpg" alt="手表正面"/> -->
+          <div class="ph"><span>⌚</span><p>手表正面实物图<br/>如：images/watch_front.jpg</p></div>
+        </div>
+        <p class="img-caption">fig.1 — 手表正面</p>
+      </div>
+      <div>
+        <div class="img-box">
+          <!-- <img src="images/watch_ui.jpg" alt="UI 界面"/> -->
+          <div class="ph"><span>🖥</span><p>LVGL UI 界面截图<br/>如：images/watch_ui.jpg</p></div>
+        </div>
+        <p class="img-caption">fig.2 — LVGL UI 界面</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY SPECS -->
+  <div class="section-label">核心指标</div>
+  <div class="spec-grid">
+    <div class="spec-item"><div class="spec-key">主控芯片</div><div class="spec-val">STM32F411CEU6</div></div>
+    <div class="spec-item"><div class="spec-key">正常工作电流</div><div class="spec-val">70–80<span class="spec-unit">mA</span></div></div>
+    <div class="spec-item"><div class="spec-key">深度休眠电流</div><div class="spec-val">~1<span class="spec-unit">mA</span></div></div>
+    <div class="spec-item"><div class="spec-key">传感器数量</div><div class="spec-val">4<span class="spec-unit">种</span></div></div>
+    <div class="spec-item"><div class="spec-key">固件升级</div><div class="spec-val">OTA<span class="spec-unit">无线</span></div></div>
+    <div class="spec-item"><div class="spec-key">UI 框架</div><div class="spec-val">LVGL</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <div class="section-label">功能详解</div>
+  <h2>系统功能</h2>
+
+  <div class="card">
+    <div class="card-title">多传感器集成 <span class="badge">硬件</span></div>
+    <ul>
+      <li>MPU6050 — 六轴 IMU，实现计步功能与抬腕唤醒手势识别</li>
+      <li>EM7028 — 光电心率传感器，实时监测用户心率数据</li>
+      <li>SPL06-001 — 气压传感器，支持气压测量与海拔计算</li>
+      <li>LSM303DLHC — 三轴加速度 + 三轴磁力计，实现电子罗盘功能</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">三级功耗管理 <span class="badge blue">低功耗</span></div>
+    <ul>
+      <li><strong>Level 1 — 正常运行：</strong>70–80 mA，所有传感器与 UI 正常工作</li>
+      <li><strong>Level 2 — 屏幕变暗：</strong>无操作一段时间后自动降低屏幕亮度</li>
+      <li><strong>Level 3 — STOP 休眠：</strong>MCU 进入 STOP 模式，电流降至约 1 mA</li>
+      <li>唤醒方式：RTC 定时中断周期唤醒 + 检测抬腕手势，兼顾响应灵敏度与功耗</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">OTA 无线固件升级 <span class="badge">蓝牙</span></div>
+    <ul>
+      <li>Bootloader / APP 双分区设计，固件分区独立管理</li>
+      <li>通过 KT6368A 蓝牙模块接收新固件，写入 Flash 后跳转执行</li>
+      <li>支持在不拆机的情况下远程更新固件，提升产品可维护性</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">辅助应用 & 数据持久化 <span class="badge">应用层</span></div>
+    <ul>
+      <li>使用 EEPROM 持久化存储用户设置（亮度、时间格式等）与步数累计数据</li>
+      <li>内置自定义计算器、秒表等辅助小应用</li>
+      <li>LVGL 图形库实现多页面 UI，支持页面切换与动画过渡</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CHALLENGES -->
+  <div class="section-label">技术难点与解决方案</div>
+  <h2>攻坚过程</h2>
+
+  <div class="card">
+    <div class="card-title">难点 1 — 多任务优先级设计</div>
+    <p>看门狗喂狗、低功耗休眠任务设为高优先级，确保系统稳定性不受干扰；传感器数据采集、蓝牙通信等低实时性任务设为低优先级，避免抢占关键资源。经过合理分层后，系统稳定运行无卡顿。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">难点 2 — 低功耗唤醒机制调优</div>
+    <p>早期使用 MPU6050 运动中断直接唤醒，但触发阈值难以调优，误触率高。改为 RTC 定时中断周期性唤醒 MCU，再由软件检测抬腕手势状态，既保证唤醒响应灵敏度，又有效控制了静止时的功耗。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">难点 3 — 任务间通信与屏幕休眠管理</div>
+    <p>使用 FreeRTOS 消息队列实现按键、充电检测、传感器数据更新等模块间的解耦通信，避免直接共享变量带来的数据竞争。设计 IdleBreak 消息机制，统一管理屏幕休眠计时器的重置逻辑，代码结构清晰易维护。</p>
+  </div>
+
+  <!-- extra image -->
+  <div class="divider"></div>
+  <div class="section-label">更多图片</div>
+  <div class="img-grid cols-3">
+    <div>
+      <div class="img-box">
+        <!-- <img src="images/watch_sensors.jpg" alt="传感器模块"/> -->
+        <div class="ph"><span>🔬</span><p>传感器模块<br/>images/watch_sensors.jpg</p></div>
+      </div>
+      <p class="img-caption">fig.3 — 传感器模块</p>
+    </div>
+    <div>
+      <div class="img-box">
+        <!-- <img src="images/watch_ota.jpg" alt="OTA 升级"/> -->
+        <div class="ph"><span>📡</span><p>OTA 升级演示<br/>images/watch_ota.jpg</p></div>
+      </div>
+      <p class="img-caption">fig.4 — OTA 升级演示</p>
+    </div>
+    <div>
+      <div class="img-box">
+        <!-- <img src="images/watch_pcb.jpg" alt="PCB"/> -->
+        <div class="ph"><span>🔧</span><p>PCB / 硬件内部<br/>images/watch_pcb.jpg</p></div>
+      </div>
+      <p class="img-caption">fig.5 — PCB 内部</p>
+    </div>
+  </div>
+
+  <a class="back-btn" href="index.html">← 返回主页</a>
+</div>
+</body>
+</html>
